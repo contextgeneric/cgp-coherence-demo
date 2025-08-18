@@ -10,4 +10,5 @@ keywords     = { workspace = true }
 description  = "CGP-enabled serde implementation"
 
 [dependencies]
-cgp                     = { workspace = true }
+cgp     = { workspace = true }
+serde   = { workspace = true }
