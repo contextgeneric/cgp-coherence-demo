@@ -29,14 +29,12 @@ where
     where
         D: serde::Deserializer<'a>,
     {
-        let bytes = deserializer.deserialize_bytes(BytesVisitor)?;
+        let bytes = deserializer.deserialize_bytes(Self)?;
         Ok(bytes.into())
     }
 }
 
-struct BytesVisitor;
-
-impl<'a> Visitor<'a> for BytesVisitor {
+impl<'a> Visitor<'a> for SerializeBytes {
     type Value = &'a [u8];
 
     fn expecting(&self, formatter: &mut alloc::fmt::Formatter) -> alloc::fmt::Result {
