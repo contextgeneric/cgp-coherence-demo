@@ -7,18 +7,18 @@ use serde::Serialize as _;
 use serde::de::Error;
 
 use crate::components::{
-    DeserializeImpl, DeserializeImplComponent, SerializeImpl, SerializeImplComponent,
+    CanDeserializeValue, ValueDeserializer, ValueDeserializerComponent, ValueSerializer,
+    ValueSerializerComponent,
 };
-use crate::providers::UseSerde;
 
 pub struct SerializeString;
 
 #[cgp_provider]
-impl<Value> SerializeImpl<Value> for SerializeString
+impl<Context, Value> ValueSerializer<Context, Value> for SerializeString
 where
     Value: Display,
 {
-    fn serialize<S>(value: &Value, serializer: S) -> Result<S::Ok, S::Error>
+    fn serialize<S>(_context: &Context, value: &Value, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
     {
@@ -28,16 +28,16 @@ where
 }
 
 #[cgp_provider]
-impl<'a, Value> DeserializeImpl<'a, Value> for SerializeString
+impl<'a, Context, Value> ValueDeserializer<'a, Context, Value> for SerializeString
 where
-    UseSerde: DeserializeImpl<'a, &'a str>,
+    Context: CanDeserializeValue<'a, &'a str>,
     Value: FromStr<Err: Display>,
 {
-    fn deserialize<D>(deserializer: D) -> Result<Value, D::Error>
+    fn deserialize<D>(context: &Context, deserializer: D) -> Result<Value, D::Error>
     where
         D: serde::Deserializer<'a>,
     {
-        let str_value = UseSerde::deserialize(deserializer)?;
+        let str_value = context.deserialize(deserializer)?;
         Value::from_str(str_value).map_err(D::Error::custom)
     }
 }

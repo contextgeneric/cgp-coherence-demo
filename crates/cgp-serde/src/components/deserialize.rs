@@ -9,7 +9,7 @@ pub trait Deserialize<'de>: Sized {
 
 #[cgp_component(ValueDeserializer)]
 pub trait CanDeserializeValue<'de, Value> {
-    fn deserialize<D>(deserializer: D) -> Result<Value, D::Error>
+    fn deserialize<D>(&self, deserializer: D) -> Result<Value, D::Error>
     where
         D: serde::Deserializer<'de>;
 }

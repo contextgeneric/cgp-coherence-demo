@@ -1,38 +1,36 @@
 use cgp::prelude::*;
 use serde::de::Visitor;
 
-use crate::components::{DeserializeImpl, DeserializeImplComponent, SerializeImplComponent};
-use crate::providers::UseSerde;
+use crate::components::{ValueDeserializer, ValueDeserializerComponent};
 
-pub struct DeserializeDefault<Provider = UseSerde>(pub PhantomData<Provider>);
-
-delegate_components! {
-    <Provider>
-    DeserializeDefault<Provider> {
-        SerializeImplComponent: Provider,
-    }
-}
-
-#[cgp_provider]
-impl<'a, Value, Provider> DeserializeImpl<'a, Value> for DeserializeDefault<Provider>
+#[cgp_new_provider]
+impl<'a, Context, Value, Provider> ValueDeserializer<'a, Context, Value>
+    for DeserializeDefault<Provider>
 where
     Value: Default,
-    Provider: DeserializeImpl<'a, Value>,
+    Provider: ValueDeserializer<'a, Context, Value>,
 {
-    fn deserialize<D>(deserializer: D) -> Result<Value, D::Error>
+    fn deserialize<D>(context: &Context, deserializer: D) -> Result<Value, D::Error>
     where
         D: serde::Deserializer<'a>,
     {
-        deserializer.deserialize_option(DefaultVisitor::<Value, Provider>(PhantomData))
+        deserializer.deserialize_option(DefaultVisitor {
+            context,
+            phantom: PhantomData::<(Value, Provider)>,
+        })
     }
 }
 
-struct DefaultVisitor<Value, Provider>(pub PhantomData<(Value, Provider)>);
+struct DefaultVisitor<'a, Context, Value, Provider> {
+    pub context: &'a Context,
+    pub phantom: PhantomData<(Value, Provider)>,
+}
 
-impl<'a, Value, Provider> Visitor<'a> for DefaultVisitor<Value, Provider>
+impl<'a, 'de, Context, Value, Provider> Visitor<'de>
+    for DefaultVisitor<'a, Context, Value, Provider>
 where
     Value: Default,
-    Provider: DeserializeImpl<'a, Value>,
+    Provider: ValueDeserializer<'de, Context, Value>,
 {
     type Value = Value;
 
@@ -49,8 +47,8 @@ where
 
     fn visit_some<D>(self, deserializer: D) -> Result<Value, D::Error>
     where
-        D: serde::Deserializer<'a>,
+        D: serde::Deserializer<'de>,
     {
-        Provider::deserialize(deserializer)
+        Provider::deserialize(&self.context, deserializer)
     }
 }

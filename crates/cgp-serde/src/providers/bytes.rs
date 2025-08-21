@@ -2,17 +2,17 @@ use cgp::prelude::*;
 use serde::de::Visitor;
 
 use crate::components::{
-    DeserializeImpl, DeserializeImplComponent, SerializeImpl, SerializeImplComponent,
+    ValueDeserializer, ValueDeserializerComponent, ValueSerializer, ValueSerializerComponent,
 };
 
 pub struct SerializeBytes;
 
 #[cgp_provider]
-impl<Value> SerializeImpl<Value> for SerializeBytes
+impl<Context, Value> ValueSerializer<Context, Value> for SerializeBytes
 where
     Value: AsRef<[u8]>,
 {
-    fn serialize<S>(value: &Value, serializer: S) -> Result<S::Ok, S::Error>
+    fn serialize<S>(_context: &Context, value: &Value, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
     {
@@ -21,11 +21,11 @@ where
 }
 
 #[cgp_provider]
-impl<'a, Value> DeserializeImpl<'a, Value> for SerializeBytes
+impl<'a, Context, Value> ValueDeserializer<'a, Context, Value> for SerializeBytes
 where
     Value: From<&'a [u8]>,
 {
-    fn deserialize<D>(deserializer: D) -> Result<Value, D::Error>
+    fn deserialize<D>(_context: &Context, deserializer: D) -> Result<Value, D::Error>
     where
         D: serde::Deserializer<'a>,
     {
