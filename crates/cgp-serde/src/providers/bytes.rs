@@ -1,0 +1,52 @@
+use cgp::prelude::*;
+use serde::de::Visitor;
+
+use crate::components::{
+    DeserializeImpl, DeserializeImplComponent, SerializeImpl, SerializeImplComponent,
+};
+
+pub struct SerializeBytes;
+
+#[cgp_provider]
+impl<Value> SerializeImpl<Value> for SerializeBytes
+where
+    Value: AsRef<[u8]>,
+{
+    fn serialize<S>(value: &Value, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_bytes(value.as_ref())
+    }
+}
+
+#[cgp_provider]
+impl<'a, Value> DeserializeImpl<'a, Value> for SerializeBytes
+where
+    Value: From<&'a [u8]>,
+{
+    fn deserialize<D>(deserializer: D) -> Result<Value, D::Error>
+    where
+        D: serde::Deserializer<'a>,
+    {
+        let bytes = deserializer.deserialize_bytes(BytesVisitor)?;
+        Ok(bytes.into())
+    }
+}
+
+struct BytesVisitor;
+
+impl<'a> Visitor<'a> for BytesVisitor {
+    type Value = &'a [u8];
+
+    fn expecting(&self, formatter: &mut alloc::fmt::Formatter) -> alloc::fmt::Result {
+        formatter.write_str("bytes")
+    }
+
+    fn visit_borrowed_bytes<E>(self, bytes: &'a [u8]) -> Result<Self::Value, E>
+    where
+        E: serde::de::Error,
+    {
+        Ok(bytes)
+    }
+}

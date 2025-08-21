@@ -3,8 +3,9 @@ use cgp::prelude::*;
 use crate::components::{
     DeserializeImpl, DeserializeImplComponent, SerializeImpl, SerializeImplComponent,
 };
+use crate::providers::UseSerde;
 
-pub struct SerializeFrom<Target, Provider = UseContext>(pub PhantomData<(Target, Provider)>);
+pub struct SerializeFrom<Target, Provider = UseSerde>(pub PhantomData<(Target, Provider)>);
 
 #[cgp_provider]
 impl<Value, Target, Provider> SerializeImpl<Value> for SerializeFrom<Target, Provider>
