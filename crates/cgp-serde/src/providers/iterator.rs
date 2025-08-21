@@ -1,10 +1,10 @@
 use alloc::vec::Vec;
 use cgp::prelude::*;
-use serde::Deserialize as SerdeDeserialize;
 
 use crate::components::{
     DeserializeImpl, DeserializeImplComponent, SerializeImpl, SerializeImplComponent,
 };
+use crate::providers::UseSerde;
 
 pub struct SerializeIterator;
 
@@ -25,13 +25,13 @@ where
 impl<'a, Value, Item> DeserializeImpl<'a, Value> for SerializeIterator
 where
     Value: IntoIterator<Item = Item> + FromIterator<Item>,
-    Vec<Item>: serde::Deserialize<'a>,
+    UseSerde: DeserializeImpl<'a, Vec<Item>>,
 {
     fn deserialize<D>(deserializer: D) -> Result<Value, D::Error>
     where
         D: serde::Deserializer<'a>,
     {
-        let items = Vec::deserialize(deserializer)?;
+        let items = UseSerde::deserialize(deserializer)?;
         Ok(Value::from_iter(items))
     }
 }
