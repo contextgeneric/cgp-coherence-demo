@@ -5,6 +5,12 @@ pub struct SerializeWithContext<'a, Context, T> {
     pub value: &'a T,
 }
 
+impl<'a, Context, T> SerializeWithContext<'a, Context, T> {
+    pub fn new(context: &'a Context, value: &'a T) -> Self {
+        Self { context, value }
+    }
+}
+
 impl<'a, Context, T> serde::Serialize for SerializeWithContext<'a, Context, T>
 where
     Context: CanSerializeValue<T>,
