@@ -12,4 +12,6 @@ description  = "CGP-enabled serde implementation"
 [dependencies]
 cgp         = { workspace = true }
 cgp-serde   = { workspace = true }
+
 serde       = { workspace = true }
+hex         = { workspace = true }
