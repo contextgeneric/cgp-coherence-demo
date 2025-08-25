@@ -82,7 +82,7 @@ dependencies = [
 [[package]]
 name = "cgp-component"
 version = "0.4.2"
-source = "git+https://github.com/contextgeneric/cgp.git#a0d9519666413e0a246d64547bfaa35a30c7d672"
+source = "git+https://github.com/contextgeneric/cgp.git?branch=delegate-component-unsized#a154b33f238ca5d73b8d65b376ee90bd2a14f372"
 
 [[package]]
 name = "cgp-core"

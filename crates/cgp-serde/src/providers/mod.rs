@@ -1,5 +1,6 @@
 mod bytes;
 mod default;
+mod deref;
 mod display;
 mod fields;
 mod from;
@@ -9,6 +10,7 @@ mod string;
 
 pub use bytes::*;
 pub use default::*;
+pub use deref::*;
 pub use display::*;
 pub use fields::*;
 pub use from::*;

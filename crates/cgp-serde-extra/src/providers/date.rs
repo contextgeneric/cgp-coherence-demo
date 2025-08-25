@@ -8,10 +8,10 @@ use cgp_serde::components::{
 use chrono::{DateTime, Utc};
 use serde::de::Error;
 
-pub struct SerializeDate;
+pub struct SerializeRfc3339Date;
 
 #[cgp_provider]
-impl<Context> ValueSerializer<Context, DateTime<Utc>> for SerializeDate
+impl<Context> ValueSerializer<Context, DateTime<Utc>> for SerializeRfc3339Date
 where
     Context: CanSerializeValue<String>,
 {
@@ -28,7 +28,7 @@ where
 }
 
 #[cgp_provider]
-impl<'de, Context> ValueDeserializer<'de, Context, DateTime<Utc>> for SerializeDate
+impl<'de, Context> ValueDeserializer<'de, Context, DateTime<Utc>> for SerializeRfc3339Date
 where
     Context: CanDeserializeValue<'de, String>,
 {
