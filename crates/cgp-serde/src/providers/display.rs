@@ -1,34 +1,32 @@
-use alloc::string::ToString;
+use alloc::string::{String, ToString};
 use core::fmt::Display;
 use core::str::FromStr;
 
 use cgp::prelude::*;
-use serde::Serialize as _;
 use serde::de::Error;
 
 use crate::components::{
-    CanDeserializeValue, ValueDeserializer, ValueDeserializerComponent, ValueSerializer,
-    ValueSerializerComponent,
+    CanDeserializeValue, CanSerializeValue, ValueDeserializer, ValueDeserializerComponent,
+    ValueSerializer, ValueSerializerComponent,
 };
 
-pub struct SerializeString;
-
-#[cgp_provider]
-impl<Context, Value> ValueSerializer<Context, Value> for SerializeString
+#[cgp_new_provider]
+impl<Context, Value> ValueSerializer<Context, Value> for SerializeWithDisplay
 where
+    Context: CanSerializeValue<String>,
     Value: Display,
 {
-    fn serialize<S>(_context: &Context, value: &Value, serializer: S) -> Result<S::Ok, S::Error>
+    fn serialize<S>(context: &Context, value: &Value, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
     {
         let str_value = value.to_string();
-        str_value.serialize(serializer)
+        context.serialize(&str_value, serializer)
     }
 }
 
-#[cgp_provider]
-impl<'a, Context, Value> ValueDeserializer<'a, Context, Value> for SerializeString
+#[cgp_new_provider]
+impl<'a, Context, Value> ValueDeserializer<'a, Context, Value> for DeserializeWithFromStr
 where
     Context: CanDeserializeValue<'a, &'a str>,
     Value: FromStr<Err: Display>,
