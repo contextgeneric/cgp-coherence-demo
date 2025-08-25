@@ -2,6 +2,7 @@ use cgp::prelude::*;
 use cgp_serde::components::ValueSerializerComponent;
 use cgp_serde::providers::{SerializeFields, UseSerde};
 use cgp_serde::types::SerializeWithContext;
+use cgp_serde_extra::providers::SerializeHex;
 
 #[derive(HasField, HasFields)]
 pub struct Payload {
@@ -20,9 +21,10 @@ delegate_components! {
                 [
                     u64,
                     String,
-                    Vec<u8>,
                 ]:
                     UseSerde,
+                Vec<u8>:
+                    SerializeHex,
                 Payload:
                     SerializeFields,
             }>
@@ -51,5 +53,9 @@ fn test_basic_serialization() {
     };
 
     let serialized = serde_json::to_string(&SerializeWithContext::new(&context, &value)).unwrap();
-    println!("serialized: {serialized}");
+
+    assert_eq!(
+        serialized,
+        "{\"quantity\":42,\"message\":\"hello\",\"data\":\"010203\"}"
+    );
 }
