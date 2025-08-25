@@ -23,6 +23,7 @@ serde               = { version = "1.0.219" }
 serde_json          = { version = "1.0.143" }
 hex                 = { version = "0.4.3" }
 base64              = { version = "0.22.1" }
+chrono              = { version = "0.4.41" }
 
 cgp-serde           = { version = "0.1.0" }
 cgp-serde-extra     = { version = "0.1.0" }
