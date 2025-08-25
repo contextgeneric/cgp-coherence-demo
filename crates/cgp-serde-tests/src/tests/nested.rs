@@ -2,7 +2,9 @@ use cgp::prelude::*;
 use cgp_serde::components::ValueSerializerComponent;
 use cgp_serde::providers::{SerializeDeref, SerializeFields, SerializeIterator, UseSerde};
 use cgp_serde::types::SerializeWithContext;
-use cgp_serde_extra::providers::{SerializeHex, SerializeRfc3339Date};
+use cgp_serde_extra::providers::{
+    SerializeBase64, SerializeHex, SerializeRfc3339Date, SerializeTimestamp,
+};
 use chrono::{DateTime, TimeZone, Utc};
 
 #[derive(HasField, HasFields)]
@@ -26,12 +28,12 @@ pub struct MessagesArchive {
 }
 
 #[cgp_context]
-pub struct App;
+pub struct AppA;
 
 delegate_components! {
-    AppComponents {
+    AppAComponents {
         ValueSerializerComponent:
-            UseDelegate<new SerializerComponents {
+            UseDelegate<new SerializerComponentsA {
                 <'a, T> &'a T:
                     SerializeDeref,
                 [
@@ -59,7 +61,55 @@ delegate_components! {
 }
 
 check_components! {
-    CanUseApp for App {
+    CanUseAppA for AppA {
+        ValueSerializerComponent: [
+            u64,
+            String,
+            Vec<u8>,
+            DateTime<Utc>,
+            EncryptedMessage,
+            MessagesByTopic,
+            MessagesArchive,
+        ]
+    }
+}
+
+#[cgp_context]
+pub struct AppB;
+
+delegate_components! {
+    AppBComponents {
+        ValueSerializerComponent:
+            UseDelegate<new SerializerComponentsB {
+                <'a, T> &'a T:
+                    SerializeDeref,
+                [
+                    i64,
+                    u64,
+                    String,
+                ]:
+                    UseSerde,
+                Vec<u8>:
+                    SerializeBase64,
+                DateTime<Utc>:
+                    SerializeTimestamp,
+                [
+                    Vec<EncryptedMessage>,
+                    Vec<MessagesByTopic>,
+                ]:
+                    SerializeIterator,
+                [
+                    MessagesArchive,
+                    MessagesByTopic,
+                    EncryptedMessage,
+                ]:
+                    SerializeFields,
+            }>
+    }
+}
+
+check_components! {
+    CanUseAppB for AppB {
         ValueSerializerComponent: [
             u64,
             String,
@@ -95,6 +145,9 @@ fn test_nested_serialization() {
         }],
     };
 
-    let serialized = serde_json::to_string(&SerializeWithContext::new(&App, &archive)).unwrap();
-    println!("serialized: {serialized}")
+    let serialized = serde_json::to_string(&SerializeWithContext::new(&AppA, &archive)).unwrap();
+    println!("serialized with A: {serialized}");
+
+    let serialized = serde_json::to_string(&SerializeWithContext::new(&AppB, &archive)).unwrap();
+    println!("serialized with B: {serialized}");
 }

@@ -613,8 +613,3 @@ checksum = "56e6c93f3a0c3b36176cb1327a4958a0353d5d166c2a35cb268ace15e91d3b57"
 dependencies = [
  "windows-link",
 ]
-
-[[patch.unused]]
-name = "cgp-error-anyhow"
-version = "0.4.2"
-source = "git+https://github.com/contextgeneric/cgp.git#a0d9519666413e0a246d64547bfaa35a30c7d672"
