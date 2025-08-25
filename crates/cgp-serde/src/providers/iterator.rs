@@ -1,10 +1,11 @@
 use alloc::vec::Vec;
 
 use cgp::prelude::*;
+use serde::ser::SerializeSeq;
 
 use crate::components::{
-    CanDeserializeValue, ValueDeserializer, ValueDeserializerComponent, ValueSerializer,
-    ValueSerializerComponent,
+    CanDeserializeValue, CanSerializeValue, ValueDeserializer, ValueDeserializerComponent,
+    ValueSerializer, ValueSerializerComponent,
 };
 
 pub struct SerializeIterator;
@@ -12,13 +13,23 @@ pub struct SerializeIterator;
 #[cgp_provider]
 impl<Context, Value> ValueSerializer<Context, Value> for SerializeIterator
 where
-    for<'a> &'a Value: IntoIterator<Item: serde::Serialize>,
+    for<'a> &'a Value: IntoIterator,
+    Context: for<'a> CanSerializeValue<<&'a Value as IntoIterator>::Item>,
 {
-    fn serialize<S>(_context: &Context, value: &Value, serializer: S) -> Result<S::Ok, S::Error>
+    fn serialize<S>(context: &Context, value: &Value, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
     {
-        serializer.collect_seq(value)
+        let items = value.into_iter();
+        let mut serializer = serializer.serialize_seq(None)?;
+        for item in items {
+            serializer.serialize_element(&SerializeWithContext {
+                context,
+                value: &item,
+            })?
+        }
+
+        serializer.end()
     }
 }
 
@@ -34,5 +45,22 @@ where
     {
         let items = context.deserialize(deserializer)?;
         Ok(Value::from_iter(items))
+    }
+}
+
+struct SerializeWithContext<'a, Context, T> {
+    context: &'a Context,
+    value: &'a T,
+}
+
+impl<'a, Context, T> serde::Serialize for SerializeWithContext<'a, Context, T>
+where
+    Context: CanSerializeValue<T>,
+{
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        self.context.serialize(self.value, serializer)
     }
 }
