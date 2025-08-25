@@ -3,6 +3,12 @@
 version = 4
 
 [[package]]
+name = "base64"
+version = "0.22.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
+
+[[package]]
 name = "cgp"
 version = "0.4.2"
 source = "git+https://github.com/contextgeneric/cgp.git#a0d9519666413e0a246d64547bfaa35a30c7d672"
@@ -201,6 +207,7 @@ dependencies = [
 name = "cgp-serde-extra"
 version = "0.1.0"
 dependencies = [
+ "base64",
  "cgp",
  "cgp-serde",
  "hex",
