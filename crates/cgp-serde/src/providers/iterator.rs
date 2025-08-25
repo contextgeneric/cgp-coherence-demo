@@ -7,6 +7,7 @@ use crate::components::{
     CanDeserializeValue, CanSerializeValue, ValueDeserializer, ValueDeserializerComponent,
     ValueSerializer, ValueSerializerComponent,
 };
+use crate::types::SerializeWithContext;
 
 pub struct SerializeIterator;
 
@@ -45,22 +46,5 @@ where
     {
         let items = context.deserialize(deserializer)?;
         Ok(Value::from_iter(items))
-    }
-}
-
-struct SerializeWithContext<'a, Context, T> {
-    context: &'a Context,
-    value: &'a T,
-}
-
-impl<'a, Context, T> serde::Serialize for SerializeWithContext<'a, Context, T>
-where
-    Context: CanSerializeValue<T>,
-{
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        self.context.serialize(self.value, serializer)
     }
 }
