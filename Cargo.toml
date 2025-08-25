@@ -4,6 +4,7 @@ resolver = "3"
 
 members = [
     "crates/cgp-serde",
+    "crates/cgp-serde-extra",
 ]
 
 [workspace.package]
@@ -19,7 +20,13 @@ cgp                 = { version = "0.4.2" }
 cgp-error-anyhow    = { version = "0.4.2" }
 serde               = { version = "1.0.219" }
 
+cgp-serde           = { version = "0.1.0" }
+cgp-serde-extra     = { version = "0.1.0" }
+
 [patch.crates-io]
+cgp-serde           = { path = "./crates/cgp-serde" }
+cgp-serde-extra     = { path = "./crates/cgp-serde-extra" }
+
 cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git" }

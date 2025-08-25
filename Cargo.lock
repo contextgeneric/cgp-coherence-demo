@@ -198,6 +198,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "cgp-serde-extra"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "cgp-serde",
+ "serde",
+]
+
+[[package]]
 name = "cgp-sync"
 version = "0.4.2"
 source = "git+https://github.com/contextgeneric/cgp.git#a0d9519666413e0a246d64547bfaa35a30c7d672"
