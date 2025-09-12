@@ -5,6 +5,7 @@ resolver = "3"
 members = [
     "crates/cgp-serde",
     "crates/cgp-serde-extra",
+    "crates/cgp-serde-json",
     "crates/cgp-serde-tests",
 ]
 
@@ -27,10 +28,12 @@ chrono              = { version = "0.4.41" }
 
 cgp-serde           = { version = "0.1.0" }
 cgp-serde-extra     = { version = "0.1.0" }
+cgp-serde-json      = { version = "0.1.0" }
 
 [patch.crates-io]
 cgp-serde           = { path = "./crates/cgp-serde" }
 cgp-serde-extra     = { path = "./crates/cgp-serde-extra" }
+cgp-serde-json      = { path = "./crates/cgp-serde-json" }
 
 cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }

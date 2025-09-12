@@ -13,6 +13,7 @@ description  = "CGP-enabled serde implementation"
 cgp                 = { workspace = true }
 cgp-serde           = { workspace = true }
 cgp-serde-extra     = { workspace = true }
+cgp-serde-json      = { workspace = true }
 
 serde       = { workspace = true, features = ["derive"] }
 serde_json  = { workspace = true }

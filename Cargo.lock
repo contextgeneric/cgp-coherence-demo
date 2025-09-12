@@ -252,6 +252,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "cgp-serde-json"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "cgp-serde",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "cgp-serde-tests"
 version = "0.1.0"
 dependencies = [
@@ -259,6 +269,7 @@ dependencies = [
  "cgp",
  "cgp-serde",
  "cgp-serde-extra",
+ "cgp-serde-json",
  "chrono",
  "hex",
  "serde",

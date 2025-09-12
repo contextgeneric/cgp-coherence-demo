@@ -1,13 +1,13 @@
 use cgp::prelude::*;
 use cgp_serde::components::{
-    CanDeserializeValue, ValueDeserializerComponent, ValueSerializerComponent,
+    CanDeserializeValueFrom, ValueDeserializerComponent, ValueFromDeserializerComponent,
+    ValueSerializerComponent,
 };
 use cgp_serde::providers::{DeserializeRecordFields, SerializeFields, SerializeString, UseSerde};
 use cgp_serde::types::SerializeWithContext;
 use cgp_serde_extra::providers::SerializeHex;
+use cgp_serde_json::DeserializeFromJsonString;
 use serde::Deserialize;
-use serde_json::Deserializer;
-use serde_json::de::StrRead;
 
 #[derive(Debug, Eq, PartialEq, HasField, HasFields, BuildField, Deserialize)]
 pub struct Payload {
@@ -42,7 +42,9 @@ delegate_components! {
                 Payload:
                     DeserializeRecordFields,
                 Vec<u8>: SerializeHex,
-            }>
+            }>,
+        ValueFromDeserializerComponent:
+            DeserializeFromJsonString,
     }
 }
 
@@ -53,7 +55,7 @@ check_components! {
             String,
             Vec<u8>,
             Payload,
-        ]
+        ],
     }
 }
 
@@ -85,9 +87,7 @@ fn test_basic_serialization() {
         "{\"quantity\":42,\"message\":\"hello\",\"data\":\"010203\"}"
     );
 
-    let mut deserializer = Deserializer::new(StrRead::new(&serialized));
-
-    let deserialized: Payload = context.deserialize(&mut deserializer).unwrap();
+    let deserialized: Payload = context.deserialize_from(&serialized).unwrap();
 
     assert_eq!(deserialized, value);
 }
