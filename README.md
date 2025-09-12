@@ -1,5 +1,5 @@
-# CGP Coherence Demo
+# cgp-serde
 
 ## Overview
 
-This repository contains the demo code of using [Context-Generic Programming](https://contextgeneric.dev/) (CGP) to solve the common coherence problems in Rust.
+This repository contains a context-generic version of the `serde` crate, to support modular serialization using [context-generic programming](https://contextgeneric.dev) (CGP).
