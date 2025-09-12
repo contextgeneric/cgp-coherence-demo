@@ -1,12 +1,11 @@
 use cgp::prelude::*;
 use cgp_serde::components::{
-    CanDeserializeValueFrom, ValueDeserializerComponent, ValueFromDeserializerComponent,
-    ValueSerializerComponent,
+    CanDeserializeValueFrom, CanSerializeValueTo, ValueDeserializerComponent,
+    ValueFromDeserializerComponent, ValueSerializerComponent, ValueToSerializerComponent,
 };
 use cgp_serde::providers::{DeserializeRecordFields, SerializeFields, SerializeString, UseSerde};
-use cgp_serde::types::SerializeWithContext;
 use cgp_serde_extra::providers::SerializeHex;
-use cgp_serde_json::DeserializeFromJsonString;
+use cgp_serde_json::{DeserializeFromJsonString, SerializeToJsonString};
 use serde::Deserialize;
 
 #[derive(Debug, Eq, PartialEq, HasField, HasFields, BuildField, Deserialize)]
@@ -45,6 +44,8 @@ delegate_components! {
             }>,
         ValueFromDeserializerComponent:
             DeserializeFromJsonString,
+        ValueToSerializerComponent:
+            SerializeToJsonString,
     }
 }
 
@@ -80,7 +81,7 @@ fn test_basic_serialization() {
         data: vec![1, 2, 3],
     };
 
-    let serialized = serde_json::to_string(&SerializeWithContext::new(&context, &value)).unwrap();
+    let serialized = context.serialize_to(&value).unwrap();
 
     assert_eq!(
         serialized,
