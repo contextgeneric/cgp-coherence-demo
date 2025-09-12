@@ -3,8 +3,9 @@ use cgp_serde::components::ValueSerializerComponent;
 use cgp_serde::providers::{SerializeFields, SerializeString, UseSerde};
 use cgp_serde::types::SerializeWithContext;
 use cgp_serde_extra::providers::SerializeHex;
+use serde::Deserialize;
 
-#[derive(HasField, HasFields)]
+#[derive(HasField, HasFields, Deserialize)]
 pub struct Payload {
     pub quantity: u64,
     pub message: String,
