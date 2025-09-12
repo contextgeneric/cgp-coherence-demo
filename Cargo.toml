@@ -17,8 +17,8 @@ authors         = ["Soares Chen <soares.chen@maybevoid.com>"]
 keywords        = ["cgp"]
 
 [workspace.dependencies]
-cgp                 = { version = "0.4.2" }
-cgp-error-anyhow    = { version = "0.4.2" }
+cgp                 = { version = "0.5.0-alpha" }
+cgp-error-anyhow    = { version = "0.5.0-alpha" }
 serde               = { version = "1.0.219" }
 serde_json          = { version = "1.0.143" }
 hex                 = { version = "0.4.3" }
@@ -35,9 +35,8 @@ cgp-serde-extra     = { path = "./crates/cgp-serde-extra" }
 cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-extra                   = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-async                   = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-async-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-component               = { git = "https://github.com/contextgeneric/cgp.git", branch = "delegate-component-unsized" }
+cgp-component               = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-macro                   = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-macro-lib               = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-extra-macro             = { git = "https://github.com/contextgeneric/cgp.git" }
@@ -48,7 +47,6 @@ cgp-error                   = { git = "https://github.com/contextgeneric/cgp.git
 cgp-error-extra             = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-run                     = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-runtime                 = { git = "https://github.com/contextgeneric/cgp.git" }
-cgp-sync                    = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-handler                 = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-monad                   = { git = "https://github.com/contextgeneric/cgp.git" }
