@@ -9,11 +9,11 @@ use serde::de::{Error, IgnoredAny, MapAccess, Visitor};
 use crate::components::{CanDeserializeValue, ValueDeserializer, ValueDeserializerComponent};
 use crate::types::DeserializeWithContext;
 
-pub struct DeserializeRecordFields<Record>(pub PhantomData<Record>);
+pub struct DeserializeRecordFields;
 
 #[cgp_provider]
 impl<'de, Context, Record, Builder> ValueDeserializer<'de, Context, Record>
-    for DeserializeRecordFields<Record>
+    for DeserializeRecordFields
 where
     Record: HasOptionalBuilder<Builder = Builder> + HasFields,
     Record::Fields: HandleMapEntry<'de, Context, Builder>,

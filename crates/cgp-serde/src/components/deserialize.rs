@@ -1,6 +1,9 @@
 use cgp::prelude::*;
 
-#[cgp_component(ValueDeserializer)]
+#[cgp_component {
+    provider: ValueDeserializer,
+    derive_delegate: UseDelegate<Value>,
+}]
 pub trait CanDeserializeValue<'de, Value> {
     fn deserialize<D>(&self, deserializer: D) -> Result<Value, D::Error>
     where

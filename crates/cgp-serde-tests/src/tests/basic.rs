@@ -1,11 +1,15 @@
 use cgp::prelude::*;
-use cgp_serde::components::ValueSerializerComponent;
-use cgp_serde::providers::{SerializeFields, SerializeString, UseSerde};
+use cgp_serde::components::{
+    CanDeserializeValue, ValueDeserializerComponent, ValueSerializerComponent,
+};
+use cgp_serde::providers::{DeserializeRecordFields, SerializeFields, SerializeString, UseSerde};
 use cgp_serde::types::SerializeWithContext;
 use cgp_serde_extra::providers::SerializeHex;
 use serde::Deserialize;
+use serde_json::Deserializer;
+use serde_json::de::StrRead;
 
-#[derive(HasField, HasFields, Deserialize)]
+#[derive(Debug, Eq, PartialEq, HasField, HasFields, BuildField, Deserialize)]
 pub struct Payload {
     pub quantity: u64,
     pub message: String,
@@ -27,17 +31,39 @@ delegate_components! {
                     SerializeHex,
                 Payload:
                     SerializeFields,
+            }>,
+        ValueDeserializerComponent:
+            UseDelegate<new DeserializerComponents {
+                [
+                    u64,
+                    String,
+                ]:
+                    UseSerde,
+                Payload:
+                    DeserializeRecordFields,
+                Vec<u8>: SerializeHex,
             }>
     }
 }
 
 check_components! {
-    CanUseApp for App {
+    CanUseAppSerializer for App {
         ValueSerializerComponent: [
             u64,
             String,
             Vec<u8>,
             Payload,
+        ]
+    }
+}
+
+check_components! {
+    <'de> CanUseAppDerializer for App {
+        ValueDeserializerComponent: [
+            (&'de (), u64),
+            (&'de (), String),
+            (&'de (), Vec<u8>),
+            (&'de (), Payload),
         ]
     }
 }
@@ -58,4 +84,10 @@ fn test_basic_serialization() {
         serialized,
         "{\"quantity\":42,\"message\":\"hello\",\"data\":\"010203\"}"
     );
+
+    let mut deserializer = Deserializer::new(StrRead::new(&serialized));
+
+    let deserialized: Payload = context.deserialize(&mut deserializer).unwrap();
+
+    assert_eq!(deserialized, value);
 }
