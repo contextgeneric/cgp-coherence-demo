@@ -240,6 +240,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "cgp-serde-arena"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "cgp-serde",
+ "serde",
+]
+
+[[package]]
 name = "cgp-serde-extra"
 version = "0.1.0"
 dependencies = [

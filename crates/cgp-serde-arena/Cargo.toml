@@ -1,0 +1,16 @@
+[package]
+name         = "cgp-serde-arena"
+version      =  "0.1.0"
+edition      = { workspace = true }
+license      = { workspace = true }
+repository   = { workspace = true }
+authors      = { workspace = true }
+rust-version = { workspace = true }
+keywords     = { workspace = true }
+description  = "Arena-based deserialization using cgp-serde"
+
+[dependencies]
+cgp         = { workspace = true }
+cgp-serde   = { workspace = true }
+
+serde       = { workspace = true }

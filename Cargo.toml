@@ -6,6 +6,7 @@ members = [
     "crates/cgp-serde",
     "crates/cgp-serde-extra",
     "crates/cgp-serde-json",
+    "crates/cgp-serde-arena",
     "crates/cgp-serde-tests",
 ]
 
