@@ -6,6 +6,7 @@ use cgp_serde::components::{
     ValueFromDeserializerComponent, ValueSerializerComponent, ValueToSerializerComponent,
 };
 use cgp_serde::providers::{DeserializeRecordFields, SerializeFields, SerializeString, UseSerde};
+use cgp_serde::types::AsJson;
 use cgp_serde_extra::providers::SerializeHex;
 use cgp_serde_json::{DeserializeFromJsonString, SerializeToJsonString};
 use serde::Deserialize;
@@ -87,7 +88,7 @@ fn test_basic_serialization() {
         data: vec![1, 2, 3],
     };
 
-    let serialized = context.serialize_to(&value).unwrap();
+    let serialized = context.serialize_to(PhantomData::<AsJson>, &value).unwrap();
 
     assert_eq!(
         serialized,

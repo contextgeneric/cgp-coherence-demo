@@ -6,11 +6,17 @@ use cgp_serde::types::SerializeWithContext;
 use serde_json::Error;
 
 #[cgp_new_provider]
-impl<Context, Value> ValueToSerializer<Context, Value, String> for SerializeToJsonString
+impl<Context, Code, Value> ValueToSerializer<Context, Code, Value> for SerializeToJsonString
 where
     Context: CanSerializeValue<Value> + CanRaiseError<Error>,
 {
-    fn serialize_to(context: &Context, value: &Value) -> Result<String, Context::Error> {
+    type Target = String;
+
+    fn serialize_to(
+        context: &Context,
+        _code: PhantomData<Code>,
+        value: &Value,
+    ) -> Result<String, Context::Error> {
         serde_json::to_string(&SerializeWithContext::new(context, value))
             .map_err(Context::raise_error)
     }
