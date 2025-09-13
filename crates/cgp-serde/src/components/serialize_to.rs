@@ -4,8 +4,6 @@ use cgp::prelude::*;
     provider: ValueToSerializer,
     derive_delegate: UseDelegate<Target>,
 }]
-pub trait CanSerializeValueTo<Value, Target> {
-    type Error;
-
+pub trait CanSerializeValueTo<Value, Target>: HasErrorType {
     fn serialize_to(&self, value: &Value) -> Result<Target, Self::Error>;
 }
