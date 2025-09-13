@@ -240,7 +240,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "cgp-serde-arena"
+name = "cgp-serde-alloc"
 version = "0.1.0"
 dependencies = [
  "cgp",
@@ -283,6 +283,17 @@ dependencies = [
  "hex",
  "serde",
  "serde_json",
+]
+
+[[package]]
+name = "cgp-serde-typed-arena"
+version = "0.1.0"
+dependencies = [
+ "cgp",
+ "cgp-serde",
+ "cgp-serde-alloc",
+ "serde",
+ "typed-arena",
 ]
 
 [[package]]
@@ -496,6 +507,12 @@ dependencies = [
  "quote",
  "unicode-ident",
 ]
+
+[[package]]
+name = "typed-arena"
+version = "2.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6af6ae20167a9ece4bcb41af5b80f8a1f1df981f6391189ce00fd257af04126a"
 
 [[package]]
 name = "unicode-ident"

@@ -6,7 +6,8 @@ members = [
     "crates/cgp-serde",
     "crates/cgp-serde-extra",
     "crates/cgp-serde-json",
-    "crates/cgp-serde-arena",
+    "crates/cgp-serde-alloc",
+    "crates/cgp-serde-typed-arena",
     "crates/cgp-serde-tests",
 ]
 
@@ -26,15 +27,20 @@ serde_json          = { version = "1.0.143" }
 hex                 = { version = "0.4.3" }
 base64              = { version = "0.22.1" }
 chrono              = { version = "0.4.41" }
+typed-arena         = { version = "2.0.2" }
 
-cgp-serde           = { version = "0.1.0" }
-cgp-serde-extra     = { version = "0.1.0" }
-cgp-serde-json      = { version = "0.1.0" }
+cgp-serde               = { version = "0.1.0" }
+cgp-serde-extra         = { version = "0.1.0" }
+cgp-serde-json          = { version = "0.1.0" }
+cgp-serde-alloc         = { version = "0.1.0" }
+cgp-serde-typed-arena   = { version = "0.1.0" }
 
 [patch.crates-io]
-cgp-serde           = { path = "./crates/cgp-serde" }
-cgp-serde-extra     = { path = "./crates/cgp-serde-extra" }
-cgp-serde-json      = { path = "./crates/cgp-serde-json" }
+cgp-serde               = { path = "./crates/cgp-serde" }
+cgp-serde-extra         = { path = "./crates/cgp-serde-extra" }
+cgp-serde-json          = { path = "./crates/cgp-serde-json" }
+cgp-serde-alloc         = { path = "./crates/cgp-serde-alloc" }
+cgp-serde-typed-arena   = { path = "./crates/cgp-serde-typed-arena" }
 
 cgp                         = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-core                    = { git = "https://github.com/contextgeneric/cgp.git" }

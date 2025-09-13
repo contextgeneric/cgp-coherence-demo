@@ -1,5 +1,5 @@
 [package]
-name         = "cgp-serde-arena"
+name         = "cgp-serde-alloc"
 version      =  "0.1.0"
 edition      = { workspace = true }
 license      = { workspace = true }
