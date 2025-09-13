@@ -2,9 +2,7 @@ use cgp::prelude::*;
 use cgp_serde::components::{
     CanDeserializeValueFrom, ValueDeserializerComponent, ValueFromDeserializerComponent,
 };
-use cgp_serde::providers::{
-    DeserializeRecordFields, SerializeIterator, TrySerializeFrom, UseSerde,
-};
+use cgp_serde::providers::{DeserializeExtend, DeserializeRecordFields, UseSerde};
 use cgp_serde_alloc::providers::DeserailizeAndAllocate;
 use cgp_serde_alloc::traits::AllocatorComponent;
 use cgp_serde_json::DeserializeFromJsonString;
@@ -12,18 +10,23 @@ use cgp_serde_typed_arena::providers::AllocateWithArena;
 use cgp_serde_typed_arena::traits::ArenaGetterComponent;
 use typed_arena::Arena;
 
-pub type Data = [u8; 4];
+#[derive(Debug, PartialEq, Eq, HasFields, BuildField)]
+pub struct Coord {
+    pub x: u64,
+    pub y: u64,
+    pub z: u64,
+}
 
-#[derive(HasFields, BuildField)]
+#[derive(Debug, PartialEq, Eq, HasFields, BuildField)]
 pub struct Payload<'a> {
     pub id: u64,
-    pub data: &'a Data,
+    pub coords: Vec<&'a Coord>,
 }
 
 #[cgp_context]
 #[derive(HasField)]
 pub struct App<'a> {
-    pub arena: &'a Arena<Data>,
+    pub arena: &'a Arena<Coord>,
 }
 
 delegate_components! {
@@ -35,10 +38,15 @@ delegate_components! {
         ValueDeserializerComponent:
             UseDelegate<new DeserializeComponents {
                 u64: UseSerde,
-                Vec<u8>: SerializeIterator,
-                Data: TrySerializeFrom<Vec<u8>>,
-                <'a> &'a Data: DeserailizeAndAllocate,
-                <'a> Payload<'a>: DeserializeRecordFields,
+                Coord:
+                    DeserializeRecordFields,
+                <'a> &'a Coord:
+                    DeserailizeAndAllocate,
+                <'a> Vec<&'a Coord>:
+                    DeserializeExtend,
+                <'a> Payload<'a>:
+                    DeserializeRecordFields,
+
             }>,
         ValueFromDeserializerComponent:
             DeserializeFromJsonString,
@@ -48,7 +56,7 @@ delegate_components! {
 check_components! {
     <'a> CanUseApp for App<'a> {
         ArenaGetterComponent:
-            (&'a (), Data),
+            (&'a (), Coord),
 
     }
 }
@@ -57,8 +65,8 @@ check_components! {
     <'de, 'a> CanDeserializeApp for App<'a> {
         ValueDeserializerComponent: [
             (&'de (), u64),
-            (&'de (), Data),
-            (&'de (), &'a Data),
+            (&'de (), Coord),
+            (&'de (), &'a Coord),
             (&'de (), Payload<'a>),
         ]
     }
@@ -67,13 +75,24 @@ check_components! {
 #[test]
 fn test_deserialize_with_arena() {
     let serialized = r#"
-{ "id": 8, "data": [1, 2, 3, 4] }
+{
+    "id": 8,
+    "coords": [
+        { "x": 1, "y": 2, "z": 3 },
+        { "x": 4, "y": 5, "z": 6 }
+    ]
+}
 "#;
 
     let arena = Arena::new();
     let app = App { arena: &arena };
 
     let deserialized: Payload<'_> = app.deserialize_from(&serialized).unwrap();
-    assert_eq!(deserialized.id, 8);
-    assert_eq!(deserialized.data, &[1, 2, 3, 4]);
+    assert_eq!(
+        deserialized,
+        Payload {
+            id: 8,
+            coords: vec![&Coord { x: 1, y: 2, z: 3 }, &Coord { x: 4, y: 5, z: 6 },]
+        }
+    );
 }
