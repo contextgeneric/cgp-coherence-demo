@@ -1,12 +1,7 @@
-use alloc::vec::Vec;
-
 use cgp::prelude::*;
 use serde::ser::SerializeSeq;
 
-use crate::components::{
-    CanDeserializeValue, CanSerializeValue, ValueDeserializer, ValueDeserializerComponent,
-    ValueSerializer, ValueSerializerComponent,
-};
+use crate::components::{CanSerializeValue, ValueSerializer, ValueSerializerComponent};
 use crate::types::SerializeWithContext;
 
 pub struct SerializeIterator;
@@ -31,20 +26,5 @@ where
         }
 
         serializer.end()
-    }
-}
-
-#[cgp_provider]
-impl<'a, Context, Value, Item> ValueDeserializer<'a, Context, Value> for SerializeIterator
-where
-    Value: IntoIterator<Item = Item> + FromIterator<Item>,
-    Context: CanDeserializeValue<'a, Vec<Item>>,
-{
-    fn deserialize<D>(context: &Context, deserializer: D) -> Result<Value, D::Error>
-    where
-        D: serde::Deserializer<'a>,
-    {
-        let items = context.deserialize(deserializer)?;
-        Ok(Value::from_iter(items))
     }
 }
