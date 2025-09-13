@@ -29,11 +29,11 @@ base64              = { version = "0.22.1" }
 chrono              = { version = "0.4.41" }
 typed-arena         = { version = "2.0.2" }
 
-cgp-serde               = { version = "0.1.0" }
-cgp-serde-extra         = { version = "0.1.0" }
-cgp-serde-json          = { version = "0.1.0" }
-cgp-serde-alloc         = { version = "0.1.0" }
-cgp-serde-typed-arena   = { version = "0.1.0" }
+cgp-serde               = { version = "0.1.0-alpha" }
+cgp-serde-extra         = { version = "0.1.0-alpha" }
+cgp-serde-json          = { version = "0.1.0-alpha" }
+cgp-serde-alloc         = { version = "0.1.0-alpha" }
+cgp-serde-typed-arena   = { version = "0.1.0-alpha" }
 
 [patch.crates-io]
 cgp-serde               = { path = "./crates/cgp-serde" }
