@@ -5,14 +5,18 @@ use serde_json::de::StrRead;
 use crate::DeserializeFromJsonReader;
 
 #[cgp_new_provider]
-impl<'a, Context, Value, S> ValueFromDeserializer<Context, Value, &'a S>
+impl<'a, Context, Code, Value, S> ValueFromDeserializer<Context, Code, Value, &'a S>
     for DeserializeFromJsonString
 where
     Context: HasErrorType,
-    DeserializeFromJsonReader: ValueFromDeserializer<Context, Value, StrRead<'a>>,
+    DeserializeFromJsonReader: ValueFromDeserializer<Context, Code, Value, StrRead<'a>>,
     S: AsRef<str>,
 {
-    fn deserialize_from(context: &Context, source: &'a S) -> Result<Value, Context::Error> {
-        DeserializeFromJsonReader::deserialize_from(context, StrRead::new(source.as_ref()))
+    fn deserialize_from(
+        context: &Context,
+        code: PhantomData<Code>,
+        source: &'a S,
+    ) -> Result<Value, Context::Error> {
+        DeserializeFromJsonReader::deserialize_from(context, code, StrRead::new(source.as_ref()))
     }
 }

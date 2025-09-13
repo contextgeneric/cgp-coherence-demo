@@ -95,7 +95,9 @@ fn test_basic_serialization() {
         "{\"quantity\":42,\"message\":\"hello\",\"data\":\"010203\"}"
     );
 
-    let deserialized: Payload = context.deserialize_from(&serialized).unwrap();
+    let deserialized: Payload = context
+        .deserialize_from(PhantomData::<AsJson>, &serialized)
+        .unwrap();
 
     assert_eq!(deserialized, value);
 }

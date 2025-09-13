@@ -5,6 +5,7 @@ use cgp_serde::components::{
     CanDeserializeValueFrom, ValueDeserializerComponent, ValueFromDeserializerComponent,
 };
 use cgp_serde::providers::{DeserializeExtend, DeserializeRecordFields, UseSerde};
+use cgp_serde::types::AsJson;
 use cgp_serde_alloc::providers::DeserailizeAndAllocate;
 use cgp_serde_alloc::traits::AllocatorComponent;
 use cgp_serde_json::DeserializeFromJsonString;
@@ -93,7 +94,9 @@ fn test_deserialize_with_arena() {
     let arena = Arena::new();
     let app = App { arena: &arena };
 
-    let deserialized: Payload<'_> = app.deserialize_from(&serialized).unwrap();
+    let deserialized: Payload<'_> = app
+        .deserialize_from(PhantomData::<AsJson>, &serialized)
+        .unwrap();
     assert_eq!(
         deserialized,
         Payload {
