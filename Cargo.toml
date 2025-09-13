@@ -62,3 +62,4 @@ cgp-inner                   = { git = "https://github.com/contextgeneric/cgp.git
 cgp-handler                 = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-monad                   = { git = "https://github.com/contextgeneric/cgp.git" }
 cgp-dispatch                = { git = "https://github.com/contextgeneric/cgp.git" }
+cgp-error-anyhow            = { git = "https://github.com/contextgeneric/cgp.git" }

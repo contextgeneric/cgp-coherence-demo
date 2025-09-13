@@ -11,6 +11,7 @@ description  = "CGP-enabled serde implementation"
 
 [dependencies]
 cgp                     = { workspace = true }
+cgp-error-anyhow        = { workspace = true }
 cgp-serde               = { workspace = true }
 cgp-serde-extra         = { workspace = true }
 cgp-serde-json          = { workspace = true }

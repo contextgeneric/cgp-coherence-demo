@@ -9,14 +9,14 @@ use serde_json::{Deserializer, Error};
 impl<Context, Value, R, 'de> ValueFromDeserializer<Context, Value, R> for DeserializeFromJsonReader
 where
     R: Read<'de>,
-    Context: CanDeserializeValue<'de, Value>,
+    Context: CanDeserializeValue<'de, Value> + CanRaiseError<Error>,
 {
-    type Error = Error;
-
-    fn deserialize_from(context: &Context, source: R) -> Result<Value, Error> {
+    fn deserialize_from(context: &Context, source: R) -> Result<Value, Context::Error> {
         let mut deserializer = Deserializer::new(source);
-        let value = context.deserialize(&mut deserializer)?;
-        deserializer.end()?;
+        let value = context
+            .deserialize(&mut deserializer)
+            .map_err(Context::raise_error)?;
+        deserializer.end().map_err(Context::raise_error)?;
 
         Ok(value)
     }

@@ -1,4 +1,6 @@
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
+use cgp_error_anyhow::{RaiseAnyhowError, UseAnyhowError};
 use cgp_serde::components::{
     CanDeserializeValueFrom, CanSerializeValueTo, ValueDeserializerComponent,
     ValueFromDeserializerComponent, ValueSerializerComponent, ValueToSerializerComponent,
@@ -20,6 +22,10 @@ pub struct App;
 
 delegate_components! {
     AppComponents {
+        ErrorTypeProviderComponent:
+            UseAnyhowError,
+        ErrorRaiserComponent:
+            RaiseAnyhowError,
         ValueSerializerComponent:
             UseDelegate<new SerializerComponents {
                 u64:

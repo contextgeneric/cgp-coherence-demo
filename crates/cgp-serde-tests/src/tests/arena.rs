@@ -1,4 +1,6 @@
+use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::prelude::*;
+use cgp_error_anyhow::{RaiseAnyhowError, UseAnyhowError};
 use cgp_serde::components::{
     CanDeserializeValueFrom, ValueDeserializerComponent, ValueFromDeserializerComponent,
 };
@@ -31,6 +33,10 @@ pub struct App<'a> {
 
 delegate_components! {
     AppComponents {
+        ErrorTypeProviderComponent:
+            UseAnyhowError,
+        ErrorRaiserComponent:
+            RaiseAnyhowError,
         ArenaGetterComponent:
             UseField<Symbol!("arena")>,
         AllocatorComponent:

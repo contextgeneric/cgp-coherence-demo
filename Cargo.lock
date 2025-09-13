@@ -18,6 +18,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "anyhow"
+version = "1.0.99"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b0674a1ddeecb70197781e945de4b3b8ffb61fa939a5597bcf48503737663100"
+
+[[package]]
 name = "autocfg"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -105,6 +111,15 @@ dependencies = [
  "cgp-component",
  "cgp-macro",
  "cgp-type",
+]
+
+[[package]]
+name = "cgp-error-anyhow"
+version = "0.5.0-alpha"
+source = "git+https://github.com/contextgeneric/cgp.git#5fce7dec9a375d57c5a8cd547691872702aaccc0"
+dependencies = [
+ "anyhow",
+ "cgp-core",
 ]
 
 [[package]]
@@ -276,6 +291,7 @@ version = "0.1.0"
 dependencies = [
  "base64",
  "cgp",
+ "cgp-error-anyhow",
  "cgp-serde",
  "cgp-serde-alloc",
  "cgp-serde-extra",

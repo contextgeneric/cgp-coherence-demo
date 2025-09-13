@@ -14,8 +14,6 @@ pub trait CanDeserializeValue<'de, Value> {
     provider: ValueFromDeserializer,
     derive_delegate: UseDelegate<Source>,
 }]
-pub trait CanDeserializeValueFrom<Value, Source> {
-    type Error;
-
+pub trait CanDeserializeValueFrom<Value, Source>: HasErrorType {
     fn deserialize_from(&self, source: Source) -> Result<Value, Self::Error>;
 }
