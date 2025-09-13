@@ -9,6 +9,7 @@ mod iterator;
 mod record;
 mod serde;
 mod string;
+mod try_from;
 
 pub use bytes::*;
 pub use default::*;
@@ -21,3 +22,4 @@ pub use iterator::*;
 pub use record::*;
 pub use serde::*;
 pub use string::*;
+pub use try_from::*;

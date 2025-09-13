@@ -4,7 +4,7 @@ use cgp_serde_alloc::traits::{Allocator, AllocatorComponent};
 use crate::traits::HasArena;
 
 #[cgp_new_provider]
-impl<'a, Context, Value: 'a> Allocator<'a, Context, Value> for ArenaAllocator
+impl<'a, Context, Value: 'a> Allocator<'a, Context, Value> for AllocateWithArena
 where
     Context: HasArena<'a, Value>,
 {

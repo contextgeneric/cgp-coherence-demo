@@ -277,12 +277,15 @@ dependencies = [
  "base64",
  "cgp",
  "cgp-serde",
+ "cgp-serde-alloc",
  "cgp-serde-extra",
  "cgp-serde-json",
+ "cgp-serde-typed-arena",
  "chrono",
  "hex",
  "serde",
  "serde_json",
+ "typed-arena",
 ]
 
 [[package]]

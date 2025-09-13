@@ -1,5 +1,7 @@
+use core::fmt::Display;
+
 use cgp::prelude::*;
-use serde::de::Visitor;
+use serde::de::{Error, Visitor};
 
 use crate::components::{
     ValueDeserializer, ValueDeserializerComponent, ValueSerializer, ValueSerializerComponent,
@@ -31,6 +33,22 @@ where
     {
         let bytes = deserializer.deserialize_bytes(Self)?;
         Ok(bytes.into())
+    }
+}
+
+#[cgp_new_provider]
+impl<'a, Context, Value> ValueDeserializer<'a, Context, Value> for TryDeserializeBytes
+where
+    Value: TryFrom<&'a [u8], Error: Display>,
+{
+    fn deserialize<D>(_context: &Context, deserializer: D) -> Result<Value, D::Error>
+    where
+        D: serde::Deserializer<'a>,
+    {
+        let bytes = deserializer.deserialize_bytes(SerializeBytes)?;
+        let value = bytes.try_into().map_err(|e| D::Error::custom(e))?;
+
+        Ok(value)
     }
 }
 
