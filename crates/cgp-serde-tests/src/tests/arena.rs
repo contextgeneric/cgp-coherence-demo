@@ -2,7 +2,7 @@ use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
 use cgp::extra::handler::CanTryCompute;
 use cgp::prelude::*;
 use cgp_error_anyhow::{RaiseAnyhowError, UseAnyhowError};
-use cgp_serde::components::{ValueDeserializerComponent, ValueFromDeserializerComponent};
+use cgp_serde::components::ValueDeserializerComponent;
 use cgp_serde::providers::{DeserializeExtend, DeserializeRecordFields, UseSerde};
 use cgp_serde_alloc::providers::DeserailizeAndAllocate;
 use cgp_serde_alloc::traits::AllocatorComponent;
@@ -61,8 +61,6 @@ delegate_components! {
                 <T> DeserializeJson<T>:
                     DeserializeFromJsonString
             }>,
-        ValueFromDeserializerComponent:
-            DeserializeFromJsonString,
     }
 }
 
