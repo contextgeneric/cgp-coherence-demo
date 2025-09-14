@@ -1,13 +1,14 @@
 use cgp::core::error::{ErrorRaiserComponent, ErrorTypeProviderComponent};
+use cgp::extra::handler::CanTryCompute;
 use cgp::prelude::*;
 use cgp_error_anyhow::{RaiseAnyhowError, UseAnyhowError};
 use cgp_serde::components::{
-    CanDeserializeValueFrom, CanSerializeValueTo, ValueDeserializerComponent,
-    ValueFromDeserializerComponent, ValueSerializerComponent, ValueToSerializerComponent,
+    ValueDeserializerComponent, ValueFromDeserializerComponent, ValueSerializerComponent,
+    ValueToSerializerComponent,
 };
 use cgp_serde::providers::{DeserializeRecordFields, SerializeFields, SerializeString, UseSerde};
-use cgp_serde::types::AsJson;
 use cgp_serde_extra::providers::SerializeHex;
+use cgp_serde_json::code::{DeserializeJson, SerializeJson};
 use cgp_serde_json::{DeserializeFromJsonString, SerializeToJsonString};
 use serde::Deserialize;
 
@@ -49,6 +50,13 @@ delegate_components! {
                     DeserializeRecordFields,
                 Vec<u8>: SerializeHex,
             }>,
+        TryComputerComponent:
+            UseDelegate<new JsonEncodingComponents {
+                SerializeJson:
+                    SerializeToJsonString,
+                <T> DeserializeJson<T>:
+                    DeserializeFromJsonString
+            }>,
         ValueFromDeserializerComponent:
             DeserializeFromJsonString,
         ValueToSerializerComponent:
@@ -88,7 +96,9 @@ fn test_basic_serialization() {
         data: vec![1, 2, 3],
     };
 
-    let serialized = context.serialize_to(PhantomData::<AsJson>, &value).unwrap();
+    let serialized = context
+        .try_compute(PhantomData::<SerializeJson>, &value)
+        .unwrap();
 
     assert_eq!(
         serialized,
@@ -96,7 +106,7 @@ fn test_basic_serialization() {
     );
 
     let deserialized: Payload = context
-        .deserialize_from(PhantomData::<AsJson>, &serialized)
+        .try_compute(PhantomData::<DeserializeJson<Payload>>, &serialized)
         .unwrap();
 
     assert_eq!(deserialized, value);

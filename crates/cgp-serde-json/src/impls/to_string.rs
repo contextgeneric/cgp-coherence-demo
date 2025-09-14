@@ -1,18 +1,18 @@
 use alloc::string::String;
 
 use cgp::prelude::*;
-use cgp_serde::components::{CanSerializeValue, ValueToSerializer, ValueToSerializerComponent};
+use cgp_serde::components::CanSerializeValue;
 use cgp_serde::types::SerializeWithContext;
 use serde_json::Error;
 
 #[cgp_new_provider]
-impl<Context, Code, Value> ValueToSerializer<Context, Code, Value> for SerializeToJsonString
+impl<Context, Code, Value> TryComputer<Context, Code, &Value> for SerializeToJsonString
 where
     Context: CanSerializeValue<Value> + CanRaiseError<Error>,
 {
-    type Target = String;
+    type Output = String;
 
-    fn serialize_to(
+    fn try_compute(
         context: &Context,
         _code: PhantomData<Code>,
         value: &Value,
