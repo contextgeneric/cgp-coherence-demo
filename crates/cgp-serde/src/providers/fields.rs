@@ -1,9 +1,7 @@
-use core::fmt::Display;
-
+use cgp::core::field::traits::StaticString;
 use cgp::prelude::*;
 use serde::ser::SerializeMap;
 
-use crate::alloc::string::ToString;
 use crate::components::{CanSerializeValue, ValueSerializer, ValueSerializerComponent};
 use crate::types::SerializeWithContext;
 
@@ -35,7 +33,7 @@ trait FieldsSerializer<Context, Value> {
 impl<Context, Value, Tag, FieldValue, Rest> FieldsSerializer<Context, Value>
     for Cons<Field<Tag, FieldValue>, Rest>
 where
-    Tag: Default + Display,
+    Tag: StaticString,
     Value: HasField<Tag, Value = FieldValue>,
     Context: CanSerializeValue<FieldValue>,
     Rest: FieldsSerializer<Context, Value>,
@@ -48,10 +46,9 @@ where
     where
         S: SerializeMap,
     {
-        let tag = Tag::default().to_string();
         let field_value = value.get_field(PhantomData);
         serializer.serialize_entry(
-            &tag,
+            Tag::VALUE,
             &SerializeWithContext {
                 context,
                 value: field_value,

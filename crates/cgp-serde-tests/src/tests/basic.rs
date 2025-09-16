@@ -7,9 +7,8 @@ use cgp_serde::providers::{DeserializeRecordFields, SerializeFields, SerializeSt
 use cgp_serde_extra::providers::SerializeHex;
 use cgp_serde_json::code::{DeserializeJson, SerializeJson};
 use cgp_serde_json::{DeserializeFromJsonString, SerializeToJsonString};
-use serde::Deserialize;
 
-#[derive(Debug, Eq, PartialEq, HasField, HasFields, BuildField, Deserialize)]
+#[derive(Debug, Eq, PartialEq, CgpData)]
 pub struct Payload {
     pub quantity: u64,
     pub message: String,

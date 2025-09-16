@@ -1,7 +1,6 @@
 use alloc::string::String;
-use core::fmt::Display;
 
-use cgp::core::field::traits::MatchStr;
+use cgp::core::field::traits::StaticString;
 use cgp::extra::field::impls::{FinalizeOptional, HasOptionalBuilder, SetOptional};
 use cgp::prelude::*;
 use serde::de::{Error, IgnoredAny, MapAccess, Visitor};
@@ -77,7 +76,7 @@ trait HandleMapEntry<'de, Context, Builder> {
 impl<'de, Context, Builder, Tag, Value, Tail> HandleMapEntry<'de, Context, Builder>
     for Cons<Field<Tag, Value>, Tail>
 where
-    Tag: MatchStr + Default + Display,
+    Tag: StaticString,
     Tail: HandleMapEntry<'de, Context, Builder>,
     Context: CanDeserializeValue<'de, Value>,
     Builder: SetOptional<Tag, Value = Value>,
@@ -88,7 +87,7 @@ where
         context: &Context,
         builder: Builder,
     ) -> Result<Builder, M::Error> {
-        if Tag::match_str(key) {
+        if key == Tag::VALUE {
             let value = map.next_value_seed(DeserializeWithContext {
                 context,
                 phantom: PhantomData::<Value>,
@@ -99,7 +98,7 @@ where
             if replaced.is_some() {
                 Err(M::Error::custom(format_args!(
                     "duplicate field: {}",
-                    Tag::default()
+                    Tag::VALUE,
                 )))
             } else {
                 Ok(builder)
