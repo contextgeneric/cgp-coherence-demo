@@ -49,6 +49,6 @@ where
     where
         D: serde::Deserializer<'de>,
     {
-        Provider::deserialize(&self.context, deserializer)
+        Provider::deserialize(self.context, deserializer)
     }
 }

@@ -21,7 +21,7 @@ where
     where
         S: serde::Serializer,
     {
-        let target = value.clone().try_into().map_err(|e| S::Error::custom(e))?;
+        let target = value.clone().try_into().map_err(S::Error::custom)?;
         context.serialize(&target, serializer)
     }
 }
@@ -37,6 +37,6 @@ where
         D: serde::Deserializer<'a>,
     {
         let target = context.deserialize(deserializer)?;
-        target.try_into().map_err(|e| D::Error::custom(e))
+        target.try_into().map_err(D::Error::custom)
     }
 }

@@ -46,7 +46,7 @@ where
         D: serde::Deserializer<'a>,
     {
         let bytes = deserializer.deserialize_bytes(SerializeBytes)?;
-        let value = bytes.try_into().map_err(|e| D::Error::custom(e))?;
+        let value = bytes.try_into().map_err(D::Error::custom)?;
 
         Ok(value)
     }
