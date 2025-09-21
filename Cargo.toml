@@ -12,7 +12,7 @@ members = [
 ]
 
 [workspace.package]
-rust-version    = "1.89"
+rust-version    = "1.90"
 edition         = "2024"
 license         = "MIT"
 repository      = "https://github.com/contextgeneric/cgp"
